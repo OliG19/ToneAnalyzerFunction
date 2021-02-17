@@ -8,6 +8,6 @@ namespace ToneAnalyzerFunction.Services
 {
     public interface IToneService
     {
-        Task<IEnumerable<Tone>> GetTones(Comment comment);
+        Task<IEnumerable<Tone>> GetTonesAsync(Comment comment);
     }
 }

@@ -15,15 +15,12 @@ namespace ToneAnalyzerFunction
         public override void Configure(IFunctionsHostBuilder builder)
         {
             ConfigureServices(builder);
-
-            builder.Services.AddOptions<WatsonConfiguration>().Configure<IConfiguration>((settings, configuration) =>
-            {
-                configuration.Bind("WatsonConfiguration", settings);
-            });
         }
 
         private void ConfigureServices(IFunctionsHostBuilder builder)
         {
+            builder.Services.AddLogging();
+
             builder.Services.AddSingleton<IToneService, ToneService>();
             builder.Services.AddSingleton<IJokeService, JokeService>();
             builder.Services.AddSingleton<IDominantToneMapper, DominantToneMapper>();

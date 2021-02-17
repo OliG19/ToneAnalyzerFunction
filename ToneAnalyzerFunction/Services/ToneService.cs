@@ -13,53 +13,54 @@ namespace ToneAnalyzerFunction.Services
 {
     public class ToneService : IToneService
     {
-        private readonly WatsonConfiguration _watsonConfiguration;
+        private static HttpClient Client = new HttpClient();
 
-        public ToneService(WatsonConfiguration watsonConfiguration)
+        public async Task<IEnumerable<Tone>> GetTonesAsync(Comment comment)
         {
-            _watsonConfiguration = watsonConfiguration;
+            try
+            {
+                var responseContent = await GetToneResponseAsync(comment);
+
+                var formattedResponse = FormatResponse(responseContent);
+
+                var toneResponse = JsonConvert.DeserializeObject<ToneResponse>(formattedResponse);
+
+                return toneResponse.DocumentTone.Tones;
+            }
+            catch (Exception exception)
+            {
+                throw new HttpRequestException(exception.Message);
+            }
         }
 
-        public async Task<IEnumerable<Tone>> GetTones(Comment comment)
+        private async Task<string> GetToneResponseAsync(Comment comment)
         {
-            var responseContent = await GetToneAsync(comment);
+            SetAuthorization();
 
-            var formattedResponse = FormatResponse(responseContent);
+            var content = CreateContent(comment);
 
-            var toneResponse = JsonConvert.DeserializeObject<ToneResponse>(formattedResponse);
+            var response = await Client.PostAsync($"{WatsonConfiguration.WatsonUrl}", content);
 
-            return toneResponse.DocumentTone.Tones;
-        }
-
-        private async Task<string> GetToneAsync(Comment comment)
-        {
-            var client = new HttpClient();
-
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic",
-                Convert.ToBase64String(
-                    Encoding.ASCII.GetBytes("apikey:" + $"{_watsonConfiguration.WatsonApiKey}")));
-
-            var postData = "{\"text\": \"" + $"{comment.Text}" + "\"}";
-            var content = new StringContent(postData, Encoding.UTF8, "application/json");
-            var response = await client.PostAsync($"{_watsonConfiguration.WatsonUrl}", content);
             var responseContent = response.Content.ReadAsStringAsync().Result;
 
             return responseContent;
         }
 
-        private string FormatResponse(string responseContent)
+        private static StringContent CreateContent(Comment comment)
         {
-            //var values = JsonConvert.DeserializeObject<Dictionary<string, string>>(responseContent);
-
-            //responseContent.Keys.Select(k => k.Replace("_", ""));
-
-            var formattedResponse = responseContent.Replace("_", "");
-
-            //var json = JsonConvert.SerializeObject(values);
-
-            //return json;
-
-            return formattedResponse;
+            var postData = "{\"text\": \"" + $"{comment.Text}" + "\"}";
+            var content = new StringContent(postData, Encoding.UTF8, "application/json");
+            return content;
         }
+
+        private static void SetAuthorization()
+        {
+            Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic",
+                Convert.ToBase64String(
+                    Encoding.ASCII.GetBytes("apikey:" + $"{WatsonConfiguration.WatsonApiKey}")));
+        }
+
+        private string FormatResponse(string responseContent)
+            => responseContent.Replace("_", "");
     }
 }

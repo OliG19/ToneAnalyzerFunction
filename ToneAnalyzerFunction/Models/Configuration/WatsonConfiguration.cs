@@ -4,10 +4,10 @@ using System.Text;
 
 namespace ToneAnalyzerFunction.Models.Configuration
 {
-    public class WatsonConfiguration
+    public static class WatsonConfiguration
     {
-        public string WatsonApiKey => Environment.GetEnvironmentVariable("WatsonApiKey");
+        public static string WatsonApiKey => Environment.GetEnvironmentVariable("WatsonApiKey");
 
-        public string WatsonUrl => Environment.GetEnvironmentVariable("WatsonUrl");
+        public static string WatsonUrl => Environment.GetEnvironmentVariable("WatsonUrl");
     }
 }
