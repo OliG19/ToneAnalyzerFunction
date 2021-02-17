@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Text;
+﻿using System.Net.Http;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using ToneAnalyzerFunction.Models;
 
-namespace ToneAnalyzerFunction.Extensions
+namespace ToneAnalyzer.Extensions
 {
     public static class HttpRequestMessageExtensions
     {

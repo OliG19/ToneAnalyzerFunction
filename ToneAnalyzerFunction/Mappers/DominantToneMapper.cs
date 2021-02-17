@@ -2,7 +2,7 @@
 using System.Linq;
 using ToneAnalyzerFunction.Models;
 
-namespace ToneAnalyzerFunction.Mappers
+namespace ToneAnalyzer.Mappers
 {
     public class DominantToneMapper : IDominantToneMapper
     {

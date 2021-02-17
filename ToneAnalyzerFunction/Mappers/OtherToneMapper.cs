@@ -1,14 +1,24 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
+using ToneAnalyzerFunction.Mappers;
 using ToneAnalyzerFunction.Models;
+using ToneAnalyzerFunction.Services;
 
-namespace ToneAnalyzerFunction.Mappers
+namespace ToneAnalyzer.Mappers
 {
     public class OtherToneMapper : ToneMapper
     {
+        private readonly IJokeService _jokeService;
+
+        public OtherToneMapper(IJokeService jokeService) : base(jokeService)
+        {
+            _jokeService = jokeService;
+        }
+
         public override async Task<FinalTone> MapAsync(string comment, DominantTone dominantDominantTone)
         {
-            var joke = await dominantDominantTone.GetJokeService().Get();
+            var joke = await _jokeService.Get();
+
             var firstJoke = joke.First();
 
             var otherTone = new FinalTone

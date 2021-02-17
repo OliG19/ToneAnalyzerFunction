@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using ToneAnalyzerFunction.Models;
 
-namespace ToneAnalyzerFunction.Mappers
+namespace ToneAnalyzer.Mappers
 {
     public interface IDominantToneMapper
     {

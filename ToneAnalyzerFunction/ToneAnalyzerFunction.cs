@@ -1,34 +1,28 @@
-using Microsoft.Azure.WebJobs;
-using Microsoft.Azure.WebJobs.Extensions.Http;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-using System.Web.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Azure.WebJobs;
+using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json.Linq;
-using ToneAnalyzerFunction.Extensions;
-using ToneAnalyzerFunction.Mappers;
+using ToneAnalyzer.Extensions;
+using ToneAnalyzer.Mappers;
 using ToneAnalyzerFunction.Models;
-using ToneAnalyzerFunction.Models.Configuration;
 using ToneAnalyzerFunction.Services;
 
-namespace ToneAnalyzerFunction
+namespace ToneAnalyzer
 {
     public class ToneAnalyzerFunction
     {
         private readonly IDominantToneMapper _dominantToneMapper;
         private readonly IToneService _toneService;
+        private readonly IJokeService _jokeService;
         private readonly ILogger _logger;
 
-        public ToneAnalyzerFunction(IDominantToneMapper dominantToneMapper, IToneService toneService, ILoggerFactory loggerFactory)
+        public ToneAnalyzerFunction(IDominantToneMapper dominantToneMapper, IToneService toneService, ILoggerFactory loggerFactory, IJokeService jokeService)
         {
             _dominantToneMapper = dominantToneMapper;
             _toneService = toneService;
+            _jokeService = jokeService;
             _logger = loggerFactory.CreateLogger<ToneAnalyzerFunction>();
         }
 
@@ -43,7 +37,7 @@ namespace ToneAnalyzerFunction
         {
             var comment = await request.GetValidComment();
 
-            if (comment.Text == null)
+            if (string.IsNullOrWhiteSpace(comment.Text))
             {
                 return new BadRequestObjectResult("Please pass a comment as a text property in the request body");
             }
@@ -52,7 +46,7 @@ namespace ToneAnalyzerFunction
 
             var dominantTone = _dominantToneMapper.Create(tones);
 
-            var mapper = dominantTone.DominantToneMapper;
+            var mapper = dominantTone.DominantToneMapper(_jokeService);
 
             var toneToSave = await mapper.MapAsync(comment.Text, dominantTone);
 

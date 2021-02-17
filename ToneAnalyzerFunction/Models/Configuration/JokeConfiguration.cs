@@ -1,15 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace ToneAnalyzerFunction.Models.Configuration
+namespace ToneAnalyzer.Models.Configuration
 {
-    public class JokeConfiguration
+    public static class JokeConfiguration
     {
-        public string JokeUrl { get; set; }
+        public static string JokeUrl => Environment.GetEnvironmentVariable("JokeUrl");
 
-        public string JokeApikey { get; set; }
+        public static string JokeApikey => Environment.GetEnvironmentVariable("JokeApikey");
 
-        public string JokeApiHost { get; set; }
+        public static string JokeApiHost => Environment.GetEnvironmentVariable("JokeApiHost");
     }
 }

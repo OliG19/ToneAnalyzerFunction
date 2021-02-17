@@ -1,4 +1,5 @@
-﻿using ToneAnalyzerFunction.Mappers;
+﻿using ToneAnalyzer.Mappers;
+using ToneAnalyzerFunction.Mappers;
 using ToneAnalyzerFunction.Services;
 
 namespace ToneAnalyzerFunction.Models
@@ -13,28 +14,21 @@ namespace ToneAnalyzerFunction.Models
 
         public bool IsOther { get; set; }
 
-        public IToneMapper DominantToneMapper
+        public IToneMapper DominantToneMapper(IJokeService jokeService)
         {
-            get
+            if (IsHappy)
             {
-                if (IsHappy)
-                {
-                    return new HappyToneMapper();
-                }
-
-                if (IsSad)
-                {
-                    return new SadToneMapper();
-                }
-
-                return new OtherToneMapper();
+                return new HappyToneMapper(jokeService);
             }
+
+            if (IsSad)
+            {
+                return new SadToneMapper(jokeService);
+            }
+
+            return new OtherToneMapper(jokeService);
         }
 
         public decimal Score { get; set; }
-
-        public JokeService GetJokeService()
-            => new JokeService();
-
     }
 }

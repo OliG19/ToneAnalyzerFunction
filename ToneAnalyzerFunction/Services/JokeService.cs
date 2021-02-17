@@ -1,12 +1,13 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
+using ToneAnalyzer.Models.Configuration;
 using ToneAnalyzerFunction.Models;
-using ToneAnalyzerFunction.Models.Configuration;
+using ToneAnalyzerFunction.Services;
 
-namespace ToneAnalyzerFunction.Services
+namespace ToneAnalyzer.Services
 {
     public class JokeService : IJokeService
     {
@@ -16,11 +17,9 @@ namespace ToneAnalyzerFunction.Services
         {
             try
             {
-                var configuration = GetJokeConfiguration();
+                CreateHeaders();
 
-                CreateHeaders(configuration);
-
-                var response = await Client.GetAsync($"{configuration.JokeUrl}");
+                var response = await Client.GetAsync($"{JokeConfiguration.JokeUrl}");
 
                 return await CreateJokeList(response);
             }
@@ -39,20 +38,10 @@ namespace ToneAnalyzerFunction.Services
             return jokeResponse.Body;
         }
 
-        private static void CreateHeaders(JokeConfiguration configuration)
+        private static void CreateHeaders()
         {
-            Client.DefaultRequestHeaders.Add("x-rapidapi-key", $"{configuration.JokeApikey}");
-            Client.DefaultRequestHeaders.Add("x-rapidapi-host", $"{configuration.JokeApiHost}");
-        }
-
-        private static JokeConfiguration GetJokeConfiguration()
-        {
-            return new JokeConfiguration
-            {
-                JokeUrl = Environment.GetEnvironmentVariable("JokeUrl"),
-                JokeApikey = Environment.GetEnvironmentVariable("JokeApikey"),
-                JokeApiHost = Environment.GetEnvironmentVariable("JokeApiHost"),
-            };
+            Client.DefaultRequestHeaders.Add("x-rapidapi-key", $"{JokeConfiguration.JokeApikey}");
+            Client.DefaultRequestHeaders.Add("x-rapidapi-host", $"{JokeConfiguration.JokeApiHost}");
         }
     }
 }
