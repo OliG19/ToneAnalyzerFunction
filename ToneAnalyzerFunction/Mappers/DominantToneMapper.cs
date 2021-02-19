@@ -8,17 +8,15 @@ namespace ToneAnalyzer.Mappers
     {
         public DominantTone Create(IEnumerable<Tone> tones)
         {
-            var toneDictionary = tones.ToDictionary(tone => tone.ToneName, tone => tone.Score);
-
-            var dominantToneValuePair = toneDictionary.Aggregate((x, y) => x.Value > y.Value ? x : y);
+            var (name, score) = GetDominantToneValuePair(tones);
 
             var dominantTone = new DominantTone
             {
-                Score = (decimal) dominantToneValuePair.Value,
-                Name = dominantToneValuePair.Key
+                Name = name,
+                Score = (decimal) score
             };
 
-            switch (dominantToneValuePair.Key)
+            switch (name)
             {
                 case "Joy":
                     dominantTone.IsHappy = true;
@@ -32,6 +30,13 @@ namespace ToneAnalyzer.Mappers
             }
 
             return dominantTone;
+        }
+
+        private static KeyValuePair<string, double> GetDominantToneValuePair(IEnumerable<Tone> tones)
+        {
+            var toneDictionary = tones.ToDictionary(tone => tone.ToneName, tone => tone.Score);
+
+            return toneDictionary.Aggregate((x, y) => x.Value > y.Value ? x : y);
         }
     }
 }

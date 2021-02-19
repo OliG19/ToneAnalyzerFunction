@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.30804.86
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ToneAnalyzer", "ToneAnalyzerFunction\ToneAnalyzer.csproj", "{B7FB9AFB-1DC9-4436-AB1F-F99DA03E8425}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToneAnalyzerFunctionTests", "ToneAnalyzerFunctionTests\ToneAnalyzerFunctionTests.csproj", "{F0D2FFE1-F874-49A7-AB2B-98AEA2C1E198}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToneAnalyzerTests", "ToneAnalyzerFunctionTests\ToneAnalyzerTests.csproj", "{F0D2FFE1-F874-49A7-AB2B-98AEA2C1E198}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,20 +1,20 @@
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Azure.WebJobs;
-using Microsoft.Extensions.Logging;
-using Moq;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Azure.WebJobs;
+using Microsoft.Extensions.Logging;
+using Moq;
 using ToneAnalyzer.Mappers;
-using ToneAnalyzerFunction.Mappers;
 using ToneAnalyzerFunction.Models;
 using ToneAnalyzerFunction.Services;
 using Xunit;
 
-namespace ToneAnalyzerFunctionTests
+namespace ToneAnalyzerTests
 {
-    public class UnitTest1
+    public class ToneAnalyzerFunctionTests
     {
         private readonly Mock<IDominantToneMapper> _dominantToneMapper;
         private readonly Mock<IToneService> _toneService;
@@ -24,7 +24,7 @@ namespace ToneAnalyzerFunctionTests
         private readonly ToneAnalyzer.ToneAnalyzerFunction _toneAnalyzerFunction;
         private readonly Mock<IAsyncCollector<FinalTone>> _mockAsyncCollector;
 
-        public UnitTest1()
+        public ToneAnalyzerFunctionTests()
         {
             _dominantToneMapper = new Mock<IDominantToneMapper>();
             _toneService = new Mock<IToneService>();
@@ -39,7 +39,7 @@ namespace ToneAnalyzerFunctionTests
         }
 
         [Fact]
-        public async void SendRequest_HappyComment_ReturnHappyToneWithNoJoke()
+        public async Task SendRequest_HappyComment_ReturnHappyToneWithNoJoke()
         {
             var request = CreateHttpRequest("this is great");
             var dominantTone = new DominantTone
@@ -61,7 +61,7 @@ namespace ToneAnalyzerFunctionTests
         }
 
         [Fact]
-        public async void SendRequest_SadComment_ReturnSadToneWithJoke()
+        public async Task SendRequest_SadComment_ReturnSadToneWithJoke()
         {
             var request = CreateHttpRequest("im sad");
             var dominantTone = new DominantTone
@@ -85,7 +85,7 @@ namespace ToneAnalyzerFunctionTests
         }
 
         [Fact]
-        public async void SendRequest_NeitherHappyOrSadComment_ReturnOtherToneWithJoke()
+        public async Task SendRequest_NeitherHappyOrSadComment_ReturnOtherToneWithJoke()
         {
             var request = CreateHttpRequest("i feel analytical");
             var dominantTone = new DominantTone
@@ -109,7 +109,7 @@ namespace ToneAnalyzerFunctionTests
         }
 
         [Fact]
-        public async void SendRequest_InvalidText_Throws400StatusCode()
+        public async Task SendRequest_InvalidText_Throws400StatusCode()
         {
             var request = CreateHttpRequest("");
 
@@ -145,6 +145,7 @@ namespace ToneAnalyzerFunctionTests
 
             request.Content = content;
             request.Method = HttpMethod.Post;
+
             return request;
         }
     }

@@ -42,6 +42,15 @@ namespace ToneAnalyzer
                 return new BadRequestObjectResult("Please pass a comment as a text property in the request body");
             }
 
+            var tone = await CreateTone(comment);
+
+            await output.AddAsync(tone);
+
+            return new OkObjectResult(tone);
+        }
+
+        private async Task<FinalTone> CreateTone(Comment comment)
+        {
             var tones = await _toneService.GetTonesAsync(comment);
 
             var dominantTone = _dominantToneMapper.Create(tones);
@@ -50,9 +59,7 @@ namespace ToneAnalyzer
 
             var toneToSave = await mapper.MapAsync(comment.Text, dominantTone);
 
-            await output.AddAsync(toneToSave);
-
-            return new OkObjectResult(toneToSave);
+            return toneToSave;
         }
     }
 }
