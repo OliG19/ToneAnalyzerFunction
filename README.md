@@ -2,13 +2,13 @@
 
 The Tone Analyzer function takes advantage of the  [IBM Watson Tone Anaylyzer API](https://www.ibm.com/watson/services/tone-analyzer/).
 
-By sending a piece of text to this Azure Function in this json format;
+To run this project locally from visual studio you will need to install the [Azure function tools for visual studio](https://docs.microsoft.com/en-us/azure/azure-functions/functions-develop-vs). Once installed you can simply run the project and then invoke the function from Postman. The function consumes a RESTful POST request, with a body json format of:
 `
 {
     "text": ""
 }
 `
-your text will be analyzed by Watson and a tone(s) will be produced which best match that of the content. Tones are given a score (double) in the range of 0.5 to 1. A score greater than 0.75 indicates a high likelihood that the tone is perceived in the content.
+your text will be analyzed by Watson and a tone(s) will be produced which best matches that of the content. Tones are given a score (double) in the range of 0.5 to 1. A score greater than 0.75 indicates a high likelihood that the tone is perceived in the content.
 
 This Azure function consumes the list of tones produced by Watson, determines which tone is most apparent and saves this tone to a CosmosDB instance hosted in Azure. Each tone is saved along with;
 * The tone score
