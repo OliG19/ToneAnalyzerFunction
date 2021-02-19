@@ -12,7 +12,7 @@ your text will be analyzed by Watson and a tone(s) will be produced which best m
 
 This Azure function consumes the list of tones produced by Watson, determines which tone is most apparent and saves this tone to a CosmosDB instance hosted in Azure. Each tone is saved along with;
 * The tone score
-* The original text/common within the request
+* The original text/comment within the request
 * A Guid as its SKU
 
 If the tone is perceived as not a cheerful or happy tone, a joke from the [Rapid Joke API](https://rapidapi.com/webknox/api/jokes) is appended to the Final Tone object which we save to the database. 
