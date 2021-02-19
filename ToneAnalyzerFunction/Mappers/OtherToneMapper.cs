@@ -1,8 +1,7 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-using ToneAnalyzerFunction.Mappers;
+using ToneAnalyzer.Services;
 using ToneAnalyzerFunction.Models;
-using ToneAnalyzerFunction.Services;
 
 namespace ToneAnalyzer.Mappers
 {
@@ -10,26 +9,20 @@ namespace ToneAnalyzer.Mappers
     {
         private readonly IJokeService _jokeService;
 
-        public OtherToneMapper(IJokeService jokeService) : base(jokeService)
+        public OtherToneMapper(IJokeService jokeService)
         {
             _jokeService = jokeService;
         }
 
-        public override async Task<FinalTone> MapAsync(string comment, DominantTone dominantDominantTone)
+        public override async Task<FinalTone> MapAsync(string comment, DominantTone dominantTone)
         {
-            var joke = await _jokeService.Get();
+            var jokes = await _jokeService.Get();
+            var jokeToSend = jokes.First();
+            var finalTone = await base.MapAsync(comment, dominantTone);
 
-            var firstJoke = joke.First();
+            finalTone.Joke = $"We think you may still fancy a joke: {jokeToSend.Setup + " " + jokeToSend.Punchline}";
 
-            var otherTone = new FinalTone
-            {
-                Comment = comment,
-                Name = dominantDominantTone.Name,
-                Score = dominantDominantTone.Score,
-                Joke = $"We think you may still fancy a joke: {firstJoke.Setup + " " + firstJoke.Punchline}"
-            };
-
-            return otherTone;
+            return finalTone;
         }
     }
 }

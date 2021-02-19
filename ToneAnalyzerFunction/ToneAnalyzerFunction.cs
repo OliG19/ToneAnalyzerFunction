@@ -6,8 +6,8 @@ using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
 using ToneAnalyzer.Extensions;
 using ToneAnalyzer.Mappers;
+using ToneAnalyzer.Services;
 using ToneAnalyzerFunction.Models;
-using ToneAnalyzerFunction.Services;
 
 namespace ToneAnalyzer
 {

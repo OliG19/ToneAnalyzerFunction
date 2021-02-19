@@ -1,30 +1,26 @@
 ﻿using System.Threading.Tasks;
+using ToneAnalyzer.Services;
 using ToneAnalyzerFunction.Models;
-using ToneAnalyzerFunction.Services;
 
-namespace ToneAnalyzerFunction.Mappers
+namespace ToneAnalyzer.Mappers
 {
     public interface IToneMapper
     {
-        Task<FinalTone> MapAsync(string comment, DominantTone dominantDominantTone);
+        Task<FinalTone> MapAsync(string comment, DominantTone dominantTone);
     }
 
     public abstract class ToneMapper : IToneMapper
     {
-        private readonly IJokeService _jokeService;
+        protected ToneMapper()
+        { }
 
-        protected ToneMapper(IJokeService jokeService)
-        {
-            _jokeService = jokeService;
-        }
-
-        public virtual async Task<FinalTone> MapAsync(string comment, DominantTone dominantDominantTone)
+        public virtual async Task<FinalTone> MapAsync(string comment, DominantTone dominantTone)
         {
             return await Task.FromResult(new FinalTone
             {
                 Comment = comment,
-                Name = dominantDominantTone.Name,
-                Score = dominantDominantTone.Score
+                Name = dominantTone.Name,
+                Score = dominantTone.Score
             });
         }
     }

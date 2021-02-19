@@ -1,6 +1,5 @@
 ﻿using ToneAnalyzer.Mappers;
-using ToneAnalyzerFunction.Mappers;
-using ToneAnalyzerFunction.Services;
+using ToneAnalyzer.Services;
 
 namespace ToneAnalyzerFunction.Models
 {
@@ -18,7 +17,7 @@ namespace ToneAnalyzerFunction.Models
         {
             if (IsHappy)
             {
-                return new HappyToneMapper(jokeService);
+                return new HappyToneMapper();
             }
 
             if (IsSad)

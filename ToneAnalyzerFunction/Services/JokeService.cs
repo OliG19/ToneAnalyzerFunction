@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using ToneAnalyzer.Models.Configuration;
 using ToneAnalyzerFunction.Models;
-using ToneAnalyzerFunction.Services;
 
 namespace ToneAnalyzer.Services
 {

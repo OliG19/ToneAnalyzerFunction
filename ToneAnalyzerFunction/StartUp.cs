@@ -4,9 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using ToneAnalyzer.Mappers;
 using ToneAnalyzer.Services;
 using ToneAnalyzerFunction;
-using ToneAnalyzerFunction.Mappers;
 using ToneAnalyzerFunction.Models.Configuration;
-using ToneAnalyzerFunction.Services;
 
 [assembly: FunctionsStartup(typeof(Startup))]
 

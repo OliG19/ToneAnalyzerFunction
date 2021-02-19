@@ -1,8 +1,7 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-using ToneAnalyzerFunction.Mappers;
+using ToneAnalyzer.Services;
 using ToneAnalyzerFunction.Models;
-using ToneAnalyzerFunction.Services;
 
 namespace ToneAnalyzer.Mappers
 {
@@ -10,7 +9,7 @@ namespace ToneAnalyzer.Mappers
     {
         private readonly IJokeService _jokeService;
 
-        public SadToneMapper(IJokeService jokeService) : base(jokeService)
+        public SadToneMapper(IJokeService jokeService)
         {
             _jokeService = jokeService;
         }
@@ -19,16 +18,11 @@ namespace ToneAnalyzer.Mappers
         {
             var jokes = await _jokeService.Get();
             var jokeToSend = jokes.First();
+            var finalTone = await base.MapAsync(comment, dominantTone);
 
-            var sadTone = new FinalTone
-            {
-                Comment = comment,
-                Name = dominantTone.Name,
-                Score = dominantTone.Score,
-                Joke = $"To cheer you up here is a joke: {jokeToSend.Setup + " " + jokeToSend.Punchline}"
-            };
+            finalTone.Joke = $"To cheer you up here is a joke: {jokeToSend.Setup + " " + jokeToSend.Punchline}";
 
-            return sadTone;
+            return finalTone;
         }
     }
 }

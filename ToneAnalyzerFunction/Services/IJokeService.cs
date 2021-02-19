@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using ToneAnalyzerFunction.Models;
 
-namespace ToneAnalyzerFunction.Services
+namespace ToneAnalyzer.Services
 {
     public interface IJokeService
     {

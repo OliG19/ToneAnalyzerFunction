@@ -8,8 +8,8 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
 using Moq;
 using ToneAnalyzer.Mappers;
+using ToneAnalyzer.Services;
 using ToneAnalyzerFunction.Models;
-using ToneAnalyzerFunction.Services;
 using Xunit;
 
 namespace ToneAnalyzerTests
@@ -39,7 +39,7 @@ namespace ToneAnalyzerTests
         }
 
         [Fact]
-        public async Task SendRequest_HappyComment_ReturnHappyToneWithNoJoke()
+        public async Task SendRequest_HappyComment_DoesNotCallJokeService()
         {
             var request = CreateHttpRequest("this is great");
             var dominantTone = new DominantTone
@@ -57,7 +57,7 @@ namespace ToneAnalyzerTests
             var resultValue = (FinalTone) result.Value;
 
             Assert.Equal("Joy", resultValue.Name);
-            Assert.Null(resultValue.Joke);
+            _jokeService.Verify(_ => _.Get(), Times.Never);
         }
 
         [Fact]
