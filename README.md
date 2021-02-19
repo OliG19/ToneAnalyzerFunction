@@ -18,6 +18,6 @@ This Azure function consumes the list of tones produced by Watson, determines wh
 If the tone is perceived as not a cheerful or happy tone, a joke from the [Rapid Joke API](https://rapidapi.com/webknox/api/jokes) is appended to the Final Tone object which we save to the database. 
 
 ## Responses
-*The Final Tone object is also returned in the response along with a 200 OK status code.
-*400 Bad Request status code is returned when a request is made without a valid json body.
-*500 Internal Server Error is returned and a HttpRequestException caught when either a tone or joke can not be consumed by either underlying service.
+* The Final Tone object is also returned in the response along with a 200 OK status code.
+* 400 Bad Request status code is returned when a request is made without a valid json body.
+* 500 Internal Server Error is returned and a HttpRequestException caught when either a tone or joke can not be consumed by either underlying service.
