@@ -1,6 +1,6 @@
 # ToneAnalyzerFunction
 
-The Tone Analyzer function takes advantage of the  [IBM Watson Tone Anaylyzer API](https://www.ibm.com/watson/services/tone-analyzer/).
+The Tone Analyzer function takes advantage of the  [IBM Watson Tone Analyzer API](https://www.ibm.com/watson/services/tone-analyzer/).
 
 To run this project locally from visual studio you will need to install the [Azure function tools for visual studio](https://docs.microsoft.com/en-us/azure/azure-functions/functions-develop-vs).
 You will then need to apply the below settings to your local.settings.json file so configuration can be binded correctly;
