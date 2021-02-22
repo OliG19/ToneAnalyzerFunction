@@ -28,7 +28,7 @@ namespace ToneAnalyzer
 
         [FunctionName("ToneAnalyzerFunction")]
         public async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "post", Route = "tone-analyzer")] HttpRequestMessage request,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "tone-analyzer")] HttpRequestMessage request,
             [CosmosDB(
                  "Tones",
                  "Items",
