@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace ToneAnalyzerFunction.Models
+﻿namespace ToneAnalyzer.Models
 {
     public class Comment
     {

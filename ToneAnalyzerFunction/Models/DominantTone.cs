@@ -13,21 +13,23 @@ namespace ToneAnalyzerFunction.Models
 
         public bool IsOther { get; set; }
 
-        public IToneMapper DominantToneMapper(IJokeService jokeService)
+        public decimal Score { get; set; }
+
+        public IToneStrategy DominantToneMapper(IJokeService jokeService)
         {
+            var toneMapper = new ToneStrategy(jokeService);
+
             if (IsHappy)
             {
-                return new HappyToneMapper();
+                return new HappyToneStrategy(toneMapper);
             }
 
             if (IsSad)
             {
-                return new SadToneMapper(jokeService);
+                return new SadToneStrategy(toneMapper);
             }
 
-            return new OtherToneMapper(jokeService);
+            return new OtherToneStrategy(toneMapper);
         }
-
-        public decimal Score { get; set; }
     }
 }

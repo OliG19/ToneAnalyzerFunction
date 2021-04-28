@@ -1,6 +1,8 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using ToneAnalyzer.Models;
 using ToneAnalyzerFunction.Models;
 
 namespace ToneAnalyzer.Extensions
@@ -9,11 +11,18 @@ namespace ToneAnalyzer.Extensions
     {
         public static async Task<Comment> GetValidComment(this HttpRequestMessage req)
         {
-            var request = await req.Content.ReadAsStringAsync();
+            try
+            {
+                var request = await req.Content.ReadAsStringAsync();
 
-            var comment = JsonConvert.DeserializeObject<Comment>(request);
+                var comment = JsonConvert.DeserializeObject<Comment>(request);
 
-            return comment;
+                return comment;
+            }
+            catch (Exception exception)
+            {
+                throw new HttpRequestException(exception.Message);
+            }
         }
     }
 }

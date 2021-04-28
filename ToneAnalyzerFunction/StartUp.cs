@@ -1,4 +1,5 @@
-﻿using Microsoft.Azure.Functions.Extensions.DependencyInjection;
+﻿using System.IO;
+using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ToneAnalyzer.Mappers;
@@ -15,6 +16,14 @@ namespace ToneAnalyzerFunction
         public override void Configure(IFunctionsHostBuilder builder)
         {
             ConfigureServices(builder);
+
+            var config = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("local.settings.json", true, reloadOnChange: true)
+                .AddJsonFile("appsettings.json", true, reloadOnChange: true)
+                .AddEnvironmentVariables()
+                .Build();
+            
         }
 
         private void ConfigureServices(IFunctionsHostBuilder builder)
@@ -23,7 +32,7 @@ namespace ToneAnalyzerFunction
 
             builder.Services.AddSingleton<IToneService, ToneService>();
             builder.Services.AddSingleton<IJokeService, JokeService>();
-            builder.Services.AddSingleton<IDominantToneMapper, DominantToneMapper>();
+            builder.Services.AddSingleton<IDominantToneStrategy, DominantToneStrategy>();
         }
     }
 }

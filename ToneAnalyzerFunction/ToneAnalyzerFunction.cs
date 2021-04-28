@@ -6,6 +6,7 @@ using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
 using ToneAnalyzer.Extensions;
 using ToneAnalyzer.Mappers;
+using ToneAnalyzer.Models;
 using ToneAnalyzer.Services;
 using ToneAnalyzerFunction.Models;
 
@@ -13,17 +14,15 @@ namespace ToneAnalyzer
 {
     public class ToneAnalyzerFunction
     {
-        private readonly IDominantToneMapper _dominantToneMapper;
+        private readonly IDominantToneStrategy _dominantToneStrategy;
         private readonly IToneService _toneService;
         private readonly IJokeService _jokeService;
-        private readonly ILogger _logger;
 
-        public ToneAnalyzerFunction(IDominantToneMapper dominantToneMapper, IToneService toneService, ILoggerFactory loggerFactory, IJokeService jokeService)
+        public ToneAnalyzerFunction(IDominantToneStrategy dominantToneStrategy, IToneService toneService, ILoggerFactory loggerFactory, IJokeService jokeService)
         {
-            _dominantToneMapper = dominantToneMapper;
+            _dominantToneStrategy = dominantToneStrategy;
             _toneService = toneService;
             _jokeService = jokeService;
-            _logger = loggerFactory.CreateLogger<ToneAnalyzerFunction>();
         }
 
         [FunctionName("ToneAnalyzerFunction")]
@@ -53,13 +52,13 @@ namespace ToneAnalyzer
         {
             var tones = await _toneService.GetTonesAsync(comment);
 
-            var dominantTone = _dominantToneMapper.Create(tones);
+            var dominantTone = _dominantToneStrategy.Create(tones);
 
             var mapper = dominantTone.DominantToneMapper(_jokeService);
 
-            var toneToSave = await mapper.MapAsync(comment.Text, dominantTone);
+            var tone = await mapper.MapAsync(comment.Text, dominantTone);
 
-            return toneToSave;
+            return tone;
         }
     }
 }

@@ -8,6 +8,7 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
 using Moq;
 using ToneAnalyzer.Mappers;
+using ToneAnalyzer.Models;
 using ToneAnalyzer.Services;
 using ToneAnalyzerFunction.Models;
 using Xunit;
@@ -16,7 +17,7 @@ namespace ToneAnalyzerTests
 {
     public class ToneAnalyzerFunctionTests
     {
-        private readonly Mock<IDominantToneMapper> _dominantToneMapper;
+        private readonly Mock<IDominantToneStrategy> _dominantToneMapper;
         private readonly Mock<IToneService> _toneService;
         private readonly Mock<IJokeService> _jokeService;
         private readonly Mock<ILoggerFactory> _logger;
@@ -26,7 +27,7 @@ namespace ToneAnalyzerTests
 
         public ToneAnalyzerFunctionTests()
         {
-            _dominantToneMapper = new Mock<IDominantToneMapper>();
+            _dominantToneMapper = new Mock<IDominantToneStrategy>();
             _toneService = new Mock<IToneService>();
             _jokeService = new Mock<IJokeService>();
             _mockAsyncCollector = new Mock<IAsyncCollector<FinalTone>>();

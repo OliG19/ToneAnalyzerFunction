@@ -4,15 +4,19 @@ using ToneAnalyzerFunction.Models;
 
 namespace ToneAnalyzer.Mappers
 {
-    public interface IToneMapper
+    public interface IToneStrategy
     {
         Task<FinalTone> MapAsync(string comment, DominantTone dominantTone);
     }
 
-    public abstract class ToneMapper : IToneMapper
+    public class ToneStrategy : IToneStrategy
     {
-        protected ToneMapper()
-        { }
+        public IJokeService JokeService { get; set; }
+
+        public ToneStrategy(IJokeService jokeService)
+        {
+            JokeService = jokeService;
+        }
 
         public virtual async Task<FinalTone> MapAsync(string comment, DominantTone dominantTone)
         {

@@ -28,7 +28,7 @@ namespace ToneAnalyzerTests
                     ToneName = "Fear"
                 },
             };
-            var dominantToneMapper = new DominantToneMapper();
+            var dominantToneMapper = new DominantToneStrategy();
 
             var result = dominantToneMapper.Create(tones);
 

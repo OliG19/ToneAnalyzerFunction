@@ -4,7 +4,7 @@ using ToneAnalyzerFunction.Models;
 
 namespace ToneAnalyzer.Mappers
 {
-    public class DominantToneMapper : IDominantToneMapper
+    public class DominantToneStrategy : IDominantToneStrategy
     {
         public DominantTone Create(IEnumerable<Tone> tones)
         {

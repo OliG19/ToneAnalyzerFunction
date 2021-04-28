@@ -3,7 +3,7 @@ using ToneAnalyzerFunction.Models;
 
 namespace ToneAnalyzer.Mappers
 {
-    public interface IDominantToneMapper
+    public interface IDominantToneStrategy
     {
         DominantTone Create(IEnumerable<Tone> tones);
     }
