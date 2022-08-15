@@ -1,25 +1,24 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
+using ToneAnalyzer.Services;
 using ToneAnalyzerFunction.Models;
 
 namespace ToneAnalyzer.Mappers
 {
     public class OtherToneStrategy : IToneStrategy
     {
-        private readonly ToneStrategy _toneStrategy;
+        private readonly IJokeService _jokeService;
 
-        public OtherToneStrategy(ToneStrategy toneStrategy)
+        public OtherToneStrategy(IJokeService jokeService)
         {
-            _toneStrategy = toneStrategy;
+            _jokeService = jokeService;
         }
 
-        public async Task<FinalTone> MapAsync(string comment, DominantTone dominantTone)
+        public async Task<FinalTone> SetFinalToneJoke(FinalTone finalTone)
         {
-            var jokes = await _toneStrategy.JokeService.Get();
-            var jokeToSend = jokes.First();
-            var finalTone = await _toneStrategy.MapAsync(comment, dominantTone);
+            var joke = await _jokeService.GetAsync();;
 
-            finalTone.Joke = $"We think you may still fancy a joke: {jokeToSend.Setup + " " + jokeToSend.Punchline}";
+            finalTone.Joke = $"We think you may still fancy a joke: {joke.Setup + " " + joke.Punchline}";
 
             return finalTone;
         }

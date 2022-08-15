@@ -7,20 +7,18 @@ namespace ToneAnalyzer.Mappers
 {
     public class SadToneStrategy : IToneStrategy
     {
-        private readonly ToneStrategy _toneStrategy;
+        private readonly IJokeService _jokeService;
 
-        public SadToneStrategy(ToneStrategy toneStrategy)
+        public SadToneStrategy(IJokeService jokeService)
         {
-            _toneStrategy = toneStrategy;
+            _jokeService = jokeService;
         }
 
-        public async Task<FinalTone> MapAsync(string comment, DominantTone dominantTone)
+        public async Task<FinalTone> SetFinalToneJoke(FinalTone finalTone)
         {
-            var jokes = await _toneStrategy.JokeService.Get();
-            var jokeToSend = jokes.First();
-            var finalTone = await _toneStrategy.MapAsync(comment, dominantTone);
+            var joke = await _jokeService.GetAsync();
 
-            finalTone.Joke = $"To cheer you up here is a joke: {jokeToSend.Setup + " " + jokeToSend.Punchline}";
+            finalTone.Joke = $"To cheer you up here is a joke: {joke.Setup + " " + joke.Punchline}";
 
             return finalTone;
         }

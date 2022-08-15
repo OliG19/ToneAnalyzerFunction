@@ -5,6 +5,7 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
 using ToneAnalyzer.Extensions;
+using ToneAnalyzer.Factory;
 using ToneAnalyzer.Mappers;
 using ToneAnalyzer.Models;
 using ToneAnalyzer.Services;
@@ -14,15 +15,16 @@ namespace ToneAnalyzer
 {
     public class ToneAnalyzerFunction
     {
-        private readonly IDominantToneStrategy _dominantToneStrategy;
+        private readonly IToneStrategyFactory _toneStrategyFactory;
         private readonly IToneService _toneService;
-        private readonly IJokeService _jokeService;
 
-        public ToneAnalyzerFunction(IDominantToneStrategy dominantToneStrategy, IToneService toneService, ILoggerFactory loggerFactory, IJokeService jokeService)
+        public ToneAnalyzerFunction(
+            IToneStrategyFactory toneStrategyFactory, 
+            IToneService toneService, 
+            ILoggerFactory loggerFactory)
         {
-            _dominantToneStrategy = dominantToneStrategy;
+            _toneStrategyFactory = toneStrategyFactory;
             _toneService = toneService;
-            _jokeService = jokeService;
         }
 
         [FunctionName("ToneAnalyzerFunction")]
@@ -31,8 +33,7 @@ namespace ToneAnalyzer
             [CosmosDB(
                  "Tones",
                  "Items",
-                Id = "id",
-                ConnectionStringSetting = "CosmosDBConnectionString")] IAsyncCollector<FinalTone> output)
+                Id = "id", ConnectionStringSetting = "Cosmos")] IAsyncCollector<FinalTone> output)
         {
             var comment = await request.GetValidComment();
 
@@ -52,11 +53,13 @@ namespace ToneAnalyzer
         {
             var tones = await _toneService.GetTonesAsync(comment);
 
-            var dominantTone = _dominantToneStrategy.Create(tones);
+            var dominantTone = DominantToneFactory.CreateDominantTone(tones);
 
-            var mapper = dominantTone.DominantToneMapper(_jokeService);
+            var toneStrategy = _toneStrategyFactory.Create(dominantTone.Name);
 
-            var tone = await mapper.MapAsync(comment.Text, dominantTone);
+            var finalTone = FinalToneMapper.MapAsync(comment.Text, dominantTone);
+
+            var tone = await toneStrategy.SetFinalToneJoke(finalTone);
 
             return tone;
         }

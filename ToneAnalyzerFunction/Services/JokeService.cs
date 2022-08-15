@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
@@ -12,7 +13,7 @@ namespace ToneAnalyzer.Services
     {
         private static HttpClient Client = new HttpClient();
 
-        public async Task<IEnumerable<Joke>> Get()
+        public async Task<Joke> GetAsync()
         {
             try
             {
@@ -20,7 +21,7 @@ namespace ToneAnalyzer.Services
 
                 var response = await Client.GetAsync($"{JokeConfiguration.JokeUrl}");
 
-                return await CreateJokeList(response);
+                return await GetFirstJoke(response);
             }
             catch (Exception exception)
             {
@@ -28,13 +29,13 @@ namespace ToneAnalyzer.Services
             }
         }
 
-        private static async Task<IEnumerable<Joke>> CreateJokeList(HttpResponseMessage response)
+        private static async Task<Joke> GetFirstJoke(HttpResponseMessage response)
         {
             var responseContent = await response.Content.ReadAsStringAsync();
 
             var jokeResponse = JsonConvert.DeserializeObject<JokeResponse>(responseContent);
 
-            return jokeResponse.Body;
+            return jokeResponse.Body.First();
         }
 
         private static void CreateHeaders()

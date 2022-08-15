@@ -6,6 +6,6 @@ namespace ToneAnalyzer.Services
 {
     public interface IJokeService
     {
-        Task<IEnumerable<Joke>> Get();
+        Task<Joke> GetAsync();
     }
 }

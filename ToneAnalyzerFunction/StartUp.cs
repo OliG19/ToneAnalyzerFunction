@@ -2,7 +2,7 @@
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using ToneAnalyzer.Mappers;
+using ToneAnalyzer.Factory;
 using ToneAnalyzer.Services;
 using ToneAnalyzerFunction;
 using ToneAnalyzerFunction.Models.Configuration;
@@ -32,7 +32,7 @@ namespace ToneAnalyzerFunction
 
             builder.Services.AddSingleton<IToneService, ToneService>();
             builder.Services.AddSingleton<IJokeService, JokeService>();
-            builder.Services.AddSingleton<IDominantToneStrategy, DominantToneStrategy>();
+            builder.Services.AddSingleton<IToneStrategyFactory, ToneStrategyFactory>();
         }
     }
 }
